@@ -74,4 +74,3 @@ deterministic and dependency-free: the quorum rule itself.
   about a real-world event.
 - A DAO or grants program requiring a `DISPUTED`-free verdict before treating a claimed
   milestone/news event as settled.
-  
