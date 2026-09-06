@@ -130,7 +130,11 @@ STATUS_RESOLVED_TRUE = _module.STATUS_RESOLVED_TRUE
 STATUS_RESOLVED_FALSE = _module.STATUS_RESOLVED_FALSE
 STATUS_DISPUTED = _module.STATUS_DISPUTED
 
-apply_quorum = NewsConsensusFeed._apply_quorum
+# _apply_quorum is a regular instance method (not @staticmethod, per GenVM lint rule E022) that
+# happens not to touch any contract state -- so a bare, un-initialized instance (built with
+# __new__, skipping __init__) is enough to call it as a bound method in isolation.
+_bare_instance = NewsConsensusFeed.__new__(NewsConsensusFeed)
+apply_quorum = _bare_instance._apply_quorum
 
 
 def test_clean_support_majority_resolves_true():
