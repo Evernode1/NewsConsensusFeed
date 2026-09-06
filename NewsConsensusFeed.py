@@ -274,12 +274,12 @@ class NewsConsensusFeed(gl.Contract):
         # counters above are still updated, so callers can see the attempt happened.
         self.queries[query_id] = query
 
-    @staticmethod
-    def _apply_quorum(supports: int, contradicts: int, quorum: int, prior_status: str) -> str:
+    def _apply_quorum(self, supports: int, contradicts: int, quorum: int, prior_status: str) -> str:
         """Pure, side-effect-free quorum rule -- this is the code-enforced consensus logic; the
-        model only ever supplies per-source stances, never the aggregate verdict. Kept as a
-        static method with no contract-state access so it can be exercised directly in unit
-        tests (tests/test_quorum.py) without deploying or mocking any GenLayer runtime call."""
+        model only ever supplies per-source stances, never the aggregate verdict. Takes no
+        contract-state (self is unused) so its behaviour can be exercised directly in unit tests
+        (tests/test_quorum.py) via an instance without deploying or mocking any GenLayer runtime
+        call. Declared as a regular instance method, not @staticmethod, per GenVM lint (E022)."""
         if supports >= quorum and contradicts == 0:
             return STATUS_RESOLVED_TRUE
         if contradicts >= quorum and supports == 0:
